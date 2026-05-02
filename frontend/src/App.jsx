@@ -1,4 +1,4 @@
-// src/App.jsx — Root component with all routes including new Profile page
+// src/App.jsx — Root component with all routes
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { AuthProvider, useAuth } from "./context/AuthContext";
@@ -8,6 +8,7 @@ import HomePage     from "./pages/HomePage";
 import LoginPage    from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 
+// Client
 import ClientLayout    from "./components/client/ClientLayout";
 import ClientDashboard from "./pages/client/ClientDashboard";
 import UploadDocuments from "./pages/client/UploadDocuments";
@@ -17,13 +18,17 @@ import ClientCalendar  from "./pages/client/ClientCalendar";
 import ClientChat      from "./pages/client/ClientChat";
 import ProfilePage     from "./pages/client/ProfilePage";
 
-import AdminLayout    from "./components/admin/AdminLayout";
-import AdminDashboard from "./pages/admin/AdminDashboard";
-import ManageClients  from "./pages/admin/ManageClients";
-import ManageFilings  from "./pages/admin/ManageFilings";
-import ManageTasks    from "./pages/admin/ManageTasks";
-import AdminReports   from "./pages/admin/AdminReports";
+// Admin
+import AdminLayout     from "./components/admin/AdminLayout";
+import AdminDashboard  from "./pages/admin/AdminDashboard";
+import ManageClients   from "./pages/admin/ManageClients";
+import ManageFilings   from "./pages/admin/ManageFilings";
+import ManageTasks     from "./pages/admin/ManageTasks";
+import AdminReports    from "./pages/admin/AdminReports";
+import AdminReminders  from "./pages/admin/AdminReminders";
+import DocumentInbox   from "./pages/admin/DocumentInbox";
 
+// Accountant
 import AccountantLayout    from "./components/accountant/AccountantLayout";
 import AccountantDashboard from "./pages/accountant/AccountantDashboard";
 import AccountantTasks     from "./pages/accountant/AccountantTasks";
@@ -40,13 +45,17 @@ const HomeRedirect = () => {
 export default function App() {
   return (
     <AuthProvider>
-      <Toaster position="top-right" toastOptions={{ duration:3000, style:{ fontFamily:"DM Sans, sans-serif", fontSize:"14px" }, success:{ iconTheme:{ primary:"#4f46e5", secondary:"#fff" } } }} />
+      <Toaster position="top-right" toastOptions={{
+        duration:3000,
+        style:{ fontFamily:"DM Sans, sans-serif", fontSize:"14px" },
+        success:{ iconTheme:{ primary:"#4f46e5", secondary:"#fff" } },
+      }} />
       <Routes>
         <Route path="/"         element={<HomeRedirect />} />
         <Route path="/login"    element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
 
-        {/* Client */}
+        {/* ── Client ─────────────────────────────────────────────── */}
         <Route element={<ProtectedRoute allowedRoles={["client"]} />}>
           <Route element={<ClientLayout />}>
             <Route path="/client/dashboard" element={<ClientDashboard />} />
@@ -59,7 +68,7 @@ export default function App() {
           </Route>
         </Route>
 
-        {/* Admin */}
+        {/* ── Admin ──────────────────────────────────────────────── */}
         <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
           <Route element={<AdminLayout />}>
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
@@ -67,10 +76,12 @@ export default function App() {
             <Route path="/admin/filings"   element={<ManageFilings />} />
             <Route path="/admin/tasks"     element={<ManageTasks />} />
             <Route path="/admin/reports"   element={<AdminReports />} />
+            <Route path="/admin/reminders" element={<AdminReminders />} />
+            <Route path="/admin/inbox"     element={<DocumentInbox />} />
           </Route>
         </Route>
 
-        {/* Accountant */}
+        {/* ── Accountant ─────────────────────────────────────────── */}
         <Route element={<ProtectedRoute allowedRoles={["accountant"]} />}>
           <Route element={<AccountantLayout />}>
             <Route path="/accountant/dashboard" element={<AccountantDashboard />} />

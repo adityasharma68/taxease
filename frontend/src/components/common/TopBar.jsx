@@ -1,4 +1,4 @@
-// src/components/common/TopBar.jsx
+// src/components/common/TopBar.jsx — All page titles including new pages
 import { useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { Bell } from "lucide-react";
@@ -15,7 +15,9 @@ const PAGE_TITLES = {
   "/admin/clients":       { title:"Manage Clients",      sub:"All registered clients" },
   "/admin/filings":       { title:"All Filings",         sub:"Platform-wide filings" },
   "/admin/tasks":         { title:"Assign Tasks",        sub:"Delegate work to accountants" },
-  "/admin/reports":       { title:"Reports",             sub:"Analytics and insights" },
+  "/admin/reports":       { title:"Reports & Analytics", sub:"Insights and delay reports" },
+  "/admin/reminders":     { title:"Reminder Control",    sub:"Manage compliance notifications" },
+  "/admin/inbox":         { title:"Document Inbox",      sub:"Review client uploads" },
   "/accountant/dashboard":{ title:"My Dashboard",        sub:"Your assigned work" },
   "/accountant/tasks":    { title:"My Tasks",            sub:"Filings assigned to you" },
   "/accountant/documents":{ title:"Client Documents",    sub:"Review uploaded files" },
@@ -29,7 +31,8 @@ const TopBar = () => {
 
   return (
     <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 sticky top-0 z-20">
-      <div>
+      {/* Mobile: left pad for hamburger button */}
+      <div className="md:ml-0 ml-10">
         <h1 className="text-lg font-bold text-slate-900">{page.title}</h1>
         {page.sub && <p className="text-xs text-slate-400">{page.sub}</p>}
       </div>

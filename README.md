@@ -142,9 +142,6 @@ EMAIL_PASS=your_app_password
 EMAIL_FROM=TaxEase <noreply@taxease.in>
 
 CLIENT_URL=http://localhost:5173
-
-RAZORPAY_KEY_ID=rzp_test_xxxxxxxxxxxx
-RAZORPAY_KEY_SECRET=xxxxxxxxxxxxxxxx
 ```
 
 ### 3. Seed Demo Users (optional)
