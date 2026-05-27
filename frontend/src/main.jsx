@@ -1,17 +1,24 @@
-// src/main.jsx
-// React application entry point — mounts the App into the HTML #root div
-
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import App from "./App";
+import App from "./App.jsx";
 import "./index.css";
+import { ThemeProvider } from "./context/ThemeContext";
+import { AuthProvider } from "./context/AuthContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    {/* BrowserRouter enables client-side routing via React Router */}
-    <BrowserRouter>
-      <App />
+    <BrowserRouter
+      future={{
+        v7_startTransition:    true,
+        v7_relativeSplatPath:  true,
+      }}
+    >
+      <ThemeProvider>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </ThemeProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

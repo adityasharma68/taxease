@@ -1,54 +1,37 @@
-// src/components/common/TopBar.jsx — All page titles including new pages
-import { useLocation } from "react-router-dom";
+import { Bell, Search } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
-import { Bell } from "lucide-react";
+import { ThemeToggleIcon } from "./ThemeToggle";
 
-const PAGE_TITLES = {
-  "/client/dashboard":    { title:"Overview",            sub:"Welcome back!" },
-  "/client/upload":       { title:"Upload Documents",    sub:"Add files for your CA" },
-  "/client/filings":      { title:"Filing History",      sub:"All your tax filings" },
-  "/client/payments":     { title:"Payments",            sub:"Invoices and billing" },
-  "/client/calendar":     { title:"Compliance Calendar", sub:"Upcoming deadlines" },
-  "/client/chat":         { title:"Chat Support",        sub:"Message your CA" },
-  "/client/profile":      { title:"Profile & KYC",       sub:"Manage your business details" },
-  "/admin/dashboard":     { title:"Admin Overview",      sub:"Platform at a glance" },
-  "/admin/clients":       { title:"Manage Clients",      sub:"All registered clients" },
-  "/admin/filings":       { title:"All Filings",         sub:"Platform-wide filings" },
-  "/admin/tasks":         { title:"Assign Tasks",        sub:"Delegate work to accountants" },
-  "/admin/reports":       { title:"Reports & Analytics", sub:"Insights and delay reports" },
-  "/admin/reminders":     { title:"Reminder Control",    sub:"Manage compliance notifications" },
-  "/admin/inbox":         { title:"Document Inbox",      sub:"Review client uploads" },
-  "/accountant/dashboard":{ title:"My Dashboard",        sub:"Your assigned work" },
-  "/accountant/tasks":    { title:"My Tasks",            sub:"Filings assigned to you" },
-  "/accountant/documents":{ title:"Client Documents",    sub:"Review uploaded files" },
-  "/accountant/chat":     { title:"Client Chat",         sub:"Communicate with clients" },
-};
-
-const TopBar = () => {
+const TopBar = ({ title = "Dashboard" }) => {
   const { user } = useAuth();
-  const location = useLocation();
-  const page = PAGE_TITLES[location.pathname] || { title:"Dashboard", sub:"" };
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
 
   return (
-    <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 sticky top-0 z-20">
-      {/* Mobile: left pad for hamburger button */}
-      <div className="md:ml-0 ml-10">
-        <h1 className="text-lg font-bold text-slate-900">{page.title}</h1>
-        {page.sub && <p className="text-xs text-slate-400">{page.sub}</p>}
+    <header className="h-16 flex items-center justify-between px-5 md:px-7 sticky top-0 z-20 backdrop-blur-sm"
+      style={{ background: "var(--bg-nav)", borderBottom: "1px solid var(--border-subtle)" }}>
+      <div>
+        <h1 className="text-base font-semibold" style={{ color: "var(--text-primary)" }}>{title}</h1>
+        <p className="text-[11px] hidden sm:block" style={{ color: "var(--text-muted)" }}>
+          {greeting}, {user?.name?.split(" ")[0] || "User"} 👋
+        </p>
       </div>
-      <div className="flex items-center gap-4">
-        <button className="relative w-9 h-9 flex items-center justify-center rounded-xl hover:bg-slate-100 transition-colors">
-          <Bell size={18} className="text-slate-600" />
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full" />
+      <div className="flex items-center gap-2">
+        <div className="hidden md:flex items-center gap-2 px-3 py-2 rounded-xl cursor-pointer transition"
+          style={{ background: "var(--bg-surface)", border: "1px solid var(--border-subtle)", color: "var(--text-muted)" }}>
+          <Search size={13} /><span className="text-xs">Search…</span>
+        </div>
+        <ThemeToggleIcon />
+        <button className="relative p-2 rounded-xl transition"
+          style={{ background: "var(--bg-surface)", border: "1px solid var(--border-subtle)", color: "var(--text-muted)" }}>
+          <Bell size={15} />
+          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-indigo-500 rounded-full border-2"
+            style={{ borderColor: "var(--bg-base)" }} />
         </button>
-        <div className="flex items-center gap-2.5">
-          <div className="text-right hidden sm:block">
-            <p className="text-sm font-semibold text-slate-800">{user?.name}</p>
-            <p className="text-xs text-slate-400 capitalize">{user?.role}</p>
-          </div>
-          <div className="w-9 h-9 bg-indigo-600 rounded-full flex items-center justify-center text-white text-xs font-bold">
-            {user?.name?.split(" ").map(n=>n[0]).join("").slice(0,2).toUpperCase()}
-          </div>
+        <div className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl
+                        flex items-center justify-center text-xs font-bold text-white cursor-pointer
+                        shadow-lg shadow-indigo-500/20 select-none">
+          {user?.name?.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase() || "U"}
         </div>
       </div>
     </header>

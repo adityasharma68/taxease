@@ -1,36 +1,34 @@
 // src/routes/ProtectedRoute.jsx
-// Route guard — redirects unauthenticated users to login
-// Also checks role so a client can't access /admin routes
-// ─────────────────────────────────────────────────────────────────────────────
-
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { Spinner } from "../components/common/UI";
 
-/**
- * ProtectedRoute
- * @param {string[]} allowedRoles  - Roles that may access this route
- *                                   e.g. ["admin"] or ["client", "accountant"]
- *                                   If empty/omitted, any logged-in user is allowed
- */
-const ProtectedRoute = ({ allowedRoles = [] }) => {
-  const { user } = useAuth();
+const ProtectedRoute = ({ allowedRoles = [], roles = [] }) => {
+  const { user, loading } = useAuth();
 
-  // Not logged in → redirect to login page
-  if (!user) {
-    return <Navigate to="/login" replace />;
+  // Support both prop names: allowedRoles (App.jsx) and roles (legacy)
+  const permitted = allowedRoles.length > 0 ? allowedRoles : roles;
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center"
+        style={{ background: "var(--bg-base)" }}>
+        <Spinner size="lg" />
+      </div>
+    );
   }
 
-  // Wrong role → redirect to their own dashboard
-  if (allowedRoles.length > 0 && !allowedRoles.includes(user.role)) {
-    const dashMap = {
+  if (!user) return <Navigate to="/login" replace />;
+
+  if (permitted.length > 0 && !permitted.includes(user.role)) {
+    const map = {
       client:     "/client/dashboard",
       admin:      "/admin/dashboard",
       accountant: "/accountant/dashboard",
     };
-    return <Navigate to={dashMap[user.role] || "/"} replace />;
+    return <Navigate to={map[user.role] || "/"} replace />;
   }
 
-  // All good — render the child route
   return <Outlet />;
 };
 

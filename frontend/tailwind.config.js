@@ -1,13 +1,23 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  // Tell Tailwind which files to scan for class names
-  content: ["./index.html", "./src/**/*.{js,jsx}"],
+  content: ["./index.html","./src/**/*.{js,jsx,ts,tsx}"],
+  // Use class strategy so we can control theme from JS (ThemeContext)
+  darkMode: "class",
   theme: {
     extend: {
-      // Custom font family
       fontFamily: {
-        sans: ["DM Sans", "Segoe UI", "sans-serif"],
-        serif: ["Playfair Display", "Georgia", "serif"],
+        sans: ["Outfit","ui-sans-serif","system-ui","sans-serif"],
+      },
+      colors: {
+        brand: { DEFAULT:"#6366f1", dark:"#4f46e5", light:"#818cf8" },
+      },
+      animation: {
+        marquee: "marquee 22s linear infinite",
+        float:   "float 5s ease-in-out infinite",
+      },
+      keyframes: {
+        marquee: { "0%":{ transform:"translateX(0)" }, "100%":{ transform:"translateX(-50%)" } },
+        float:   { "0%,100%":{ transform:"translateY(0)" }, "50%":{ transform:"translateY(-7px)" } },
       },
     },
   },
