@@ -59,7 +59,7 @@ const ManageClients = () => {
       {/* ── Add Client Form ──────────────────────────────────────── */}
       {showForm && (
         <Card className="p-6">
-          <h3 className="font-bold text-slate-900 mb-4">Add New Client</h3>
+          <h3 className="font-bold text-[var(--text-primary)] mb-4">Add New Client</h3>
           <form onSubmit={handleCreate} className="grid grid-cols-2 gap-4">
             {[
               ["Full Name",     "name",     "text",  "Rahul Sharma"],
@@ -69,16 +69,16 @@ const ManageClients = () => {
               ["GSTIN",         "gstin",    "text",  "27ABCDE1234F1Z5"],
             ].map(([label, name, type, ph]) => (
               <div key={name}>
-                <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">{label}</label>
+                <label className="block text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wide mb-1.5">{label}</label>
                 <input type={type} placeholder={ph} value={newUser[name]}
                   onChange={e => setNewUser(p => ({ ...p, [name]: e.target.value }))}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:border-indigo-500 outline-none" />
+                  className="w-full px-3 py-2 border border-[var(--border-subtle)] rounded-lg text-sm focus:border-indigo-500 outline-none" />
               </div>
             ))}
             <div>
-              <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Plan</label>
+              <label className="block text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wide mb-1.5">Plan</label>
               <select value={newUser.plan} onChange={e => setNewUser(p => ({ ...p, plan: e.target.value }))}
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm bg-white focus:border-indigo-500 outline-none">
+                className="w-full px-3 py-2 border border-[var(--border-subtle)] rounded-lg text-sm bg-[var(--bg-surface)] focus:border-indigo-500 outline-none">
                 <option>Basic</option><option>Pro</option><option>Enterprise</option>
               </select>
             </div>
@@ -94,7 +94,7 @@ const ManageClients = () => {
       <input
         value={search} onChange={e => setSearch(e.target.value)}
         placeholder="Search by name, email or GSTIN..."
-        className="w-full max-w-sm px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:border-indigo-500 outline-none"
+        className="w-full max-w-sm px-4 py-2.5 border border-[var(--border-subtle)] rounded-xl text-sm focus:border-indigo-500 outline-none"
       />
 
       {/* ── Table ───────────────────────────────────────────────── */}
@@ -107,34 +107,34 @@ const ManageClients = () => {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="bg-slate-50 text-left">
+                <tr className="bg-[var(--bg-surface-2)] text-left">
                   {["Client","GSTIN","Plan","Status","Assigned CA","Actions"].map(h => (
-                    <th key={h} className="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">{h}</th>
+                    <th key={h} className="px-4 py-3 text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wide whitespace-nowrap">{h}</th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-50">
+              <tbody className="divide-y divide-[var(--divide-color)]">
                 {filtered.map(c => (
-                  <tr key={c._id} className="hover:bg-slate-50 transition-colors">
+                  <tr key={c._id} className="hover:bg-[var(--bg-surface-2)] transition-colors">
                     <td className="px-4 py-3.5">
                       <div className="flex items-center gap-2.5">
                         <div className="w-7 h-7 bg-indigo-100 rounded-full flex items-center justify-center text-xs font-bold text-indigo-700">
                           {c.name.split(" ").map(n=>n[0]).join("").slice(0,2)}
                         </div>
                         <div>
-                          <p className="text-sm font-semibold text-slate-900">{c.name}</p>
-                          <p className="text-xs text-slate-400">{c.email}</p>
+                          <p className="text-sm font-semibold text-[var(--text-primary)]">{c.name}</p>
+                          <p className="text-xs text-[var(--text-muted)]">{c.email}</p>
                         </div>
                       </div>
                     </td>
-                    <td className="px-4 py-3.5 font-mono text-xs text-slate-600">{c.gstin || "—"}</td>
+                    <td className="px-4 py-3.5 font-mono text-xs text-[var(--text-secondary)]">{c.gstin || "—"}</td>
                     <td className="px-4 py-3.5"><StatusBadge status={c.plan} /></td>
                     <td className="px-4 py-3.5"><StatusBadge status={c.isActive ? "Active" : "Inactive"} /></td>
                     <td className="px-4 py-3.5">
                       <select
                         defaultValue={c.assignedAccountant?._id || ""}
                         onChange={e => handleAssign(c._id, e.target.value)}
-                        className="text-xs border border-slate-200 rounded-lg px-2 py-1.5 bg-white focus:border-indigo-500 outline-none"
+                        className="text-xs border border-[var(--border-subtle)] rounded-lg px-2 py-1.5 bg-[var(--bg-surface)] focus:border-indigo-500 outline-none"
                       >
                         <option value="">Unassigned</option>
                         {accountants.map(a => <option key={a._id} value={a._id}>{a.name}</option>)}

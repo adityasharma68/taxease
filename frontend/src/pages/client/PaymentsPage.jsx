@@ -75,18 +75,18 @@ const PaymentsPage = () => {
         {loading ? <div className="flex justify-center py-10"><Spinner /></div>
         : payments.length === 0 ? <EmptyState icon={CreditCard} title="No invoices yet" subtitle="Invoices appear here once created by your accountant." />
         : (
-          <div className="divide-y divide-slate-50">
+          <div className="divide-y divide-[var(--divide-color)]">
             {payments.map(inv => (
               <div key={inv._id} className="flex items-center justify-between px-5 py-4 flex-wrap gap-3">
                 <div>
-                  <p className="text-sm font-semibold text-slate-900">{inv.description}</p>
-                  <p className="text-xs text-slate-400">{inv.invoiceNumber} • {new Date(inv.createdAt).toLocaleDateString("en-IN")}</p>
-                  {inv.transactionId && <p className="text-xs text-slate-400 font-mono mt-0.5">TXN: {inv.transactionId}</p>}
+                  <p className="text-sm font-semibold text-[var(--text-primary)]">{inv.description}</p>
+                  <p className="text-xs text-[var(--text-muted)]">{inv.invoiceNumber} • {new Date(inv.createdAt).toLocaleDateString("en-IN")}</p>
+                  {inv.transactionId && <p className="text-xs text-[var(--text-muted)] font-mono mt-0.5">TXN: {inv.transactionId}</p>}
                 </div>
                 <div className="flex items-center gap-4 flex-wrap">
                   <div className="text-right">
-                    <p className="text-sm font-bold text-slate-900">₹{((inv.amount+inv.tax)/100).toLocaleString("en-IN")}</p>
-                    <p className="text-xs text-slate-400">incl. 18% GST</p>
+                    <p className="text-sm font-bold text-[var(--text-primary)]">₹{((inv.amount+inv.tax)/100).toLocaleString("en-IN")}</p>
+                    <p className="text-xs text-[var(--text-muted)]">incl. 18% GST</p>
                   </div>
                   <StatusBadge status={inv.status} />
                   {inv.status === "Pending" && (
@@ -94,7 +94,7 @@ const PaymentsPage = () => {
                       <CreditCard size={12} /> Pay Now
                     </button>
                   )}
-                  <button className="text-slate-400 hover:text-indigo-600 transition-colors"><Download size={14} /></button>
+                  <button className="text-[var(--text-muted)] hover:text-indigo-600 transition-colors"><Download size={14} /></button>
                 </div>
               </div>
             ))}
@@ -102,13 +102,13 @@ const PaymentsPage = () => {
         )}
       </Card>
       <Card className="p-6">
-        <h3 className="font-bold text-slate-900 mb-4">Accepted Payment Methods</h3>
+        <h3 className="font-bold text-[var(--text-primary)] mb-4">Accepted Payment Methods</h3>
         <div className="flex flex-wrap gap-3">
           {["UPI / PhonePe / GPay","Net Banking","Credit Card","Debit Card","Razorpay"].map(m => (
-            <div key={m} className="px-4 py-2.5 border border-slate-200 rounded-xl text-sm font-medium text-slate-600 bg-slate-50">{m}</div>
+            <div key={m} className="px-4 py-2.5 border border-[var(--border-subtle)] rounded-xl text-sm font-medium text-[var(--text-secondary)] bg-[var(--bg-surface-2)]">{m}</div>
           ))}
         </div>
-        <p className="text-xs text-slate-400 mt-4 flex items-center gap-1.5">
+        <p className="text-xs text-[var(--text-muted)] mt-4 flex items-center gap-1.5">
           <ShieldCheck size={12} /> All payments secured with 256-bit SSL via Razorpay
         </p>
       </Card>

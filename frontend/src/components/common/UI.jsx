@@ -124,17 +124,17 @@ export const StatusBadge = ({ status }) => {
     "In Progress": "bg-blue-500/10    text-blue-600    dark:text-blue-400    border-blue-500/20",
     "High":        "bg-red-500/10     text-red-600     dark:text-red-400     border-red-500/20",
     "Medium":      "bg-amber-500/10   text-amber-600   dark:text-amber-400   border-amber-500/20",
-    "Low":         "bg-slate-500/10   text-slate-500                         border-slate-500/20",
+    "Low":         "bg-[var(--text-muted)]/10   text-[var(--text-muted)]                         border-slate-500/20",
     "Active":      "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
     "Inactive":    "bg-red-500/10     text-red-600     dark:text-red-400     border-red-500/20",
-    "Basic":       "bg-slate-500/10   text-slate-500                         border-slate-500/20",
+    "Basic":       "bg-[var(--text-muted)]/10   text-[var(--text-muted)]                         border-slate-500/20",
     "Pro":         "bg-indigo-500/10  text-indigo-600  dark:text-indigo-400  border-indigo-500/20",
     "Enterprise":  "bg-violet-500/10  text-violet-600  dark:text-violet-400  border-violet-500/20",
   };
   return (
     <span
       className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold border
-                  ${styles[status] || "bg-gray-500/10 text-gray-500 border-gray-500/20"}`}
+                  ${styles[status] || "bg-gray-500/10 text-[var(--text-muted)] border-gray-500/20"}`}
     >
       {status}
     </span>
@@ -144,7 +144,7 @@ export const StatusBadge = ({ status }) => {
 // ── Badge (generic — any label + color key) ───────────────────────────────────
 export const Badge = ({ label, color = "default" }) => {
   const colors = {
-    default: "bg-slate-500/10  text-slate-500  border-slate-500/20",
+    default: "bg-[var(--text-muted)]/10  text-[var(--text-muted)]  border-slate-500/20",
     indigo:  "bg-indigo-500/10 text-indigo-500 border-indigo-500/20",
     emerald: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
     amber:   "bg-amber-500/10  text-amber-500  border-amber-500/20",
@@ -333,7 +333,7 @@ export const Td = ({ children, className = "" }) => (
 export const Tr = ({ children, className = "", onClick }) => (
   <tr
     onClick={onClick}
-    className={`transition-colors duration-150 ${onClick ? "cursor-pointer hover:bg-white/[0.03]" : ""} ${className}`}
+    className={`transition-colors duration-150 ${onClick ? "cursor-pointer hover:bg-[var(--bg-surface)]/[0.03]" : ""} ${className}`}
   >
     {children}
   </tr>
@@ -359,7 +359,7 @@ export const Modal = ({ open, onClose, title, children, maxWidth = "max-w-md" })
             <h3 className="font-semibold" style={{ color: "var(--text-primary)" }}>{title}</h3>
             <button
               onClick={onClose}
-              className="p-1.5 rounded-lg transition-colors hover:bg-white/[0.08]"
+              className="p-1.5 rounded-lg transition-colors hover:bg-[var(--bg-surface)]/[0.08]"
               style={{ color: "var(--text-muted)" }}
             >
               <X size={16} />

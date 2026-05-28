@@ -53,38 +53,38 @@ const ManageFilings = () => {
       {/* Create Form */}
       {showForm && (
         <Card className="p-6">
-          <h3 className="font-bold text-slate-900 mb-4">Create New Filing</h3>
+          <h3 className="font-bold text-[var(--text-primary)] mb-4">Create New Filing</h3>
           <form onSubmit={handleCreate} className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Client *</label>
+              <label className="block text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wide mb-1.5">Client *</label>
               <select value={form.client} onChange={e => setForm(p=>({...p,client:e.target.value}))} required
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm bg-white focus:border-indigo-500 outline-none">
+                className="w-full px-3 py-2 border border-[var(--border-subtle)] rounded-lg text-sm bg-[var(--bg-surface)] focus:border-indigo-500 outline-none">
                 <option value="">Select client</option>
                 {clients.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
               </select>
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Filing Type *</label>
+              <label className="block text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wide mb-1.5">Filing Type *</label>
               <select value={form.type} onChange={e => setForm(p=>({...p,type:e.target.value}))}
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm bg-white focus:border-indigo-500 outline-none">
+                className="w-full px-3 py-2 border border-[var(--border-subtle)] rounded-lg text-sm bg-[var(--bg-surface)] focus:border-indigo-500 outline-none">
                 {FILING_TYPES.map(t => <option key={t}>{t}</option>)}
               </select>
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Period *</label>
+              <label className="block text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wide mb-1.5">Period *</label>
               <input type="text" placeholder="e.g. April 2025 or FY 2024-25" value={form.period}
                 onChange={e => setForm(p=>({...p,period:e.target.value}))} required
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:border-indigo-500 outline-none" />
+                className="w-full px-3 py-2 border border-[var(--border-subtle)] rounded-lg text-sm focus:border-indigo-500 outline-none" />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Due Date *</label>
+              <label className="block text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wide mb-1.5">Due Date *</label>
               <input type="date" value={form.dueDate} onChange={e => setForm(p=>({...p,dueDate:e.target.value}))} required
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:border-indigo-500 outline-none" />
+                className="w-full px-3 py-2 border border-[var(--border-subtle)] rounded-lg text-sm focus:border-indigo-500 outline-none" />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Assign Accountant</label>
+              <label className="block text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wide mb-1.5">Assign Accountant</label>
               <select value={form.accountant} onChange={e => setForm(p=>({...p,accountant:e.target.value}))}
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm bg-white focus:border-indigo-500 outline-none">
+                className="w-full px-3 py-2 border border-[var(--border-subtle)] rounded-lg text-sm bg-[var(--bg-surface)] focus:border-indigo-500 outline-none">
                 <option value="">Unassigned</option>
                 {accountants.map(a => <option key={a._id} value={a._id}>{a.name}</option>)}
               </select>
@@ -101,7 +101,7 @@ const ManageFilings = () => {
       <div className="flex gap-2 flex-wrap">
         {["All","Pending","In Process","Filed"].map(s => (
           <button key={s} onClick={() => setFilter(s)}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${filter===s?"bg-indigo-600 text-white":"bg-white border border-slate-200 text-slate-600 hover:bg-slate-50"}`}>
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${filter===s?"bg-indigo-600 text-white":"bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:bg-[var(--bg-surface-2)]"}`}>
             {s}
           </button>
         ))}
@@ -115,24 +115,24 @@ const ManageFilings = () => {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="bg-slate-50">
+                <tr className="bg-[var(--bg-surface-2)]">
                   {["Client","Type","Period","Due Date","Accountant","Status","Update Status"].map(h => (
-                    <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">{h}</th>
+                    <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wide whitespace-nowrap">{h}</th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-50">
+              <tbody className="divide-y divide-[var(--divide-color)]">
                 {filtered.map(f => (
-                  <tr key={f._id} className="hover:bg-slate-50 transition-colors">
-                    <td className="px-4 py-3.5 text-sm font-semibold text-slate-900">{f.client?.name || "—"}</td>
-                    <td className="px-4 py-3.5 text-sm text-slate-700">{f.type}</td>
-                    <td className="px-4 py-3.5 text-sm text-slate-600">{f.period}</td>
-                    <td className="px-4 py-3.5 text-sm text-slate-600 whitespace-nowrap">{new Date(f.dueDate).toLocaleDateString("en-IN")}</td>
-                    <td className="px-4 py-3.5 text-sm text-slate-600">{f.accountant?.name || <span className="text-slate-300">Unassigned</span>}</td>
+                  <tr key={f._id} className="hover:bg-[var(--bg-surface-2)] transition-colors">
+                    <td className="px-4 py-3.5 text-sm font-semibold text-[var(--text-primary)]">{f.client?.name || "—"}</td>
+                    <td className="px-4 py-3.5 text-sm text-[var(--text-secondary)]">{f.type}</td>
+                    <td className="px-4 py-3.5 text-sm text-[var(--text-secondary)]">{f.period}</td>
+                    <td className="px-4 py-3.5 text-sm text-[var(--text-secondary)] whitespace-nowrap">{new Date(f.dueDate).toLocaleDateString("en-IN")}</td>
+                    <td className="px-4 py-3.5 text-sm text-[var(--text-secondary)]">{f.accountant?.name || <span className="text-slate-300">Unassigned</span>}</td>
                     <td className="px-4 py-3.5"><StatusBadge status={f.status} /></td>
                     <td className="px-4 py-3.5">
                       <select value={f.status} onChange={e => handleStatusChange(f._id, e.target.value)}
-                        className="text-xs border border-slate-200 rounded-lg px-2 py-1.5 bg-white focus:border-indigo-500 outline-none">
+                        className="text-xs border border-[var(--border-subtle)] rounded-lg px-2 py-1.5 bg-[var(--bg-surface)] focus:border-indigo-500 outline-none">
                         <option>Pending</option>
                         <option>In Process</option>
                         <option>Filed</option>

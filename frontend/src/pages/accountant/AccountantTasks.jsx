@@ -40,10 +40,10 @@ const UploadProofModal = ({ task, onClose, onSuccess }) => {
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md">
-        <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-          <h3 className="font-bold text-slate-900">Upload Filing Proof</h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600"><X size={18} /></button>
+      <div className="bg-[var(--bg-surface)] rounded-2xl shadow-2xl w-full max-w-md">
+        <div className="px-6 py-4 border-b border-[var(--border-subtle)] flex items-center justify-between">
+          <h3 className="font-bold text-[var(--text-primary)]">Upload Filing Proof</h3>
+          <button onClick={onClose} className="text-[var(--text-muted)] hover:text-[var(--text-secondary)]"><X size={18} /></button>
         </div>
         <div className="p-6 space-y-4">
           <div className="bg-indigo-50 rounded-xl p-3">
@@ -51,19 +51,19 @@ const UploadProofModal = ({ task, onClose, onSuccess }) => {
             <p className="text-xs text-indigo-600">{task.client?.name} • {task.period}</p>
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1.5">Acknowledgement Number <span className="text-red-500">*</span></label>
+            <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">Acknowledgement Number <span className="text-red-500">*</span></label>
             <input value={ackNumber} onChange={e => setAckNumber(e.target.value)} placeholder="e.g. ACK20250511001"
-              className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm font-mono focus:border-indigo-500 outline-none" />
+              className="w-full px-4 py-2.5 border border-[var(--border-subtle)] rounded-xl text-sm font-mono focus:border-indigo-500 outline-none" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1.5">Upload Proof PDF (optional)</label>
+            <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">Upload Proof PDF (optional)</label>
             <div onClick={() => inputRef.current.click()}
-              className="border-2 border-dashed border-slate-200 rounded-xl p-6 text-center cursor-pointer hover:border-indigo-400 hover:bg-slate-50 transition-all">
+              className="border-2 border-dashed border-[var(--border-subtle)] rounded-xl p-6 text-center cursor-pointer hover:border-indigo-400 hover:bg-[var(--bg-surface-2)] transition-all">
               <input ref={inputRef} type="file" className="hidden" accept=".pdf,.jpg,.jpeg,.png" onChange={e => setFile(e.target.files[0])} />
               {file ? (
                 <div className="flex items-center justify-center gap-2 text-sm text-indigo-700"><CheckCircle size={16} />{file.name}</div>
               ) : (
-                <div><Upload size={20} className="text-slate-400 mx-auto mb-2" /><p className="text-sm text-slate-500">Click to upload acknowledgement</p></div>
+                <div><Upload size={20} className="text-[var(--text-muted)] mx-auto mb-2" /><p className="text-sm text-[var(--text-muted)]">Click to upload acknowledgement</p></div>
               )}
             </div>
           </div>
@@ -73,7 +73,7 @@ const UploadProofModal = ({ task, onClose, onSuccess }) => {
             className="flex-1 py-3 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 disabled:opacity-60 text-sm flex items-center justify-center gap-2">
             {uploading ? "Uploading..." : <><Upload size={14} />Submit Proof</>}
           </button>
-          <button onClick={onClose} className="px-5 py-3 bg-slate-100 text-slate-700 font-semibold rounded-xl text-sm">Cancel</button>
+          <button onClick={onClose} className="px-5 py-3 bg-[var(--bg-surface-2)] text-[var(--text-secondary)] font-semibold rounded-xl text-sm">Cancel</button>
         </div>
       </div>
     </div>
@@ -102,7 +102,7 @@ const AccountantTasks = () => {
       <PageHeader title="My Tasks" subtitle="Manage assigned filing work" />
       {proofModal && <UploadProofModal task={proofModal} onClose={() => setProofModal(null)} onSuccess={refetch} />}
       {loading ? <div className="flex justify-center py-12"><Spinner /></div>
-      : tasks.length === 0 ? <div className="bg-white rounded-2xl border border-slate-100 p-8"><EmptyState icon={ClipboardList} title="No tasks assigned" subtitle="Tasks assigned by admin will appear here." /></div>
+      : tasks.length === 0 ? <div className="bg-[var(--bg-surface)] rounded-2xl border border-[var(--border-subtle)] p-8"><EmptyState icon={ClipboardList} title="No tasks assigned" subtitle="Tasks assigned by admin will appear here." /></div>
       : (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {columns.map(col => {
@@ -110,17 +110,17 @@ const AccountantTasks = () => {
             return (
               <div key={col.label} className={`${col.bg} border rounded-2xl p-4`}>
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-bold text-slate-800 text-sm">{col.label}</h3>
+                  <h3 className="font-bold text-[var(--text-primary)] text-sm">{col.label}</h3>
                   <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${col.badge}`}>{items.length}</span>
                 </div>
                 <div className="space-y-3">
                   {items.map(t => (
-                    <div key={t._id} className="bg-white rounded-xl p-4 border border-slate-100 shadow-sm">
-                      <p className="text-sm font-bold text-slate-900 mb-0.5">{t.title}</p>
-                      <p className="text-xs text-slate-500 mb-3">{t.client?.name} • {t.period}</p>
+                    <div key={t._id} className="bg-[var(--bg-surface)] rounded-xl p-4 border border-[var(--border-subtle)] shadow-[var(--shadow-card)]">
+                      <p className="text-sm font-bold text-[var(--text-primary)] mb-0.5">{t.title}</p>
+                      <p className="text-xs text-[var(--text-muted)] mb-3">{t.client?.name} • {t.period}</p>
                       <div className="flex gap-1.5 mb-3 flex-wrap"><StatusBadge status={t.priority} /></div>
-                      <p className="text-xs text-slate-400 mb-3">
-                        📅 Due: <span className={new Date(t.deadline) < new Date() && t.status !== "Completed" ? "text-red-600 font-semibold" : "text-slate-600"}>
+                      <p className="text-xs text-[var(--text-muted)] mb-3">
+                        📅 Due: <span className={new Date(t.deadline) < new Date() && t.status !== "Completed" ? "text-red-600 font-semibold" : "text-[var(--text-secondary)]"}>
                           {new Date(t.deadline).toLocaleDateString("en-IN")}
                         </span>
                       </p>
@@ -148,7 +148,7 @@ const AccountantTasks = () => {
                     </div>
                   ))}
                   {items.length === 0 && (
-                    <div className="text-center text-xs text-slate-400 py-6 bg-white/50 rounded-xl border border-dashed border-slate-200">No tasks here</div>
+                    <div className="text-center text-xs text-[var(--text-muted)] py-6 bg-[var(--bg-surface)]/50 rounded-xl border border-dashed border-[var(--border-subtle)]">No tasks here</div>
                   )}
                 </div>
               </div>

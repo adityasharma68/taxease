@@ -42,15 +42,15 @@ const ClientCalendar = () => {
 
       {/* Deadlines list */}
       <Card>
-        <div className="px-5 py-4 border-b border-slate-100">
-          <h3 className="font-bold text-slate-900">May – July 2025</h3>
+        <div className="px-5 py-4 border-b border-[var(--border-subtle)]">
+          <h3 className="font-bold text-[var(--text-primary)]">May – July 2025</h3>
         </div>
-        <div className="divide-y divide-slate-50">
+        <div className="divide-y divide-[var(--divide-color)]">
           {DEADLINES.map((item, i) => (
             <div key={i} className={`flex items-center gap-5 px-5 py-4 ${item.urgent ? "bg-red-50/40" : ""}`}>
               {/* Date block */}
               <div className={`w-16 h-16 rounded-2xl flex flex-col items-center justify-center flex-shrink-0
-                ${item.urgent ? "bg-red-100 text-red-800" : "bg-slate-100 text-slate-700"}`}>
+                ${item.urgent ? "bg-red-100 text-red-800" : "bg-[var(--bg-surface-2)] text-[var(--text-secondary)]"}`}>
                 <span className="text-xs font-bold uppercase">{item.month}</span>
                 <span className="text-3xl font-black leading-none">{item.date}</span>
               </div>
@@ -58,12 +58,12 @@ const ClientCalendar = () => {
               {/* Info */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap mb-0.5">
-                  <p className="text-sm font-bold text-slate-900">{item.event}</p>
+                  <p className="text-sm font-bold text-[var(--text-primary)]">{item.event}</p>
                   {item.urgent && (
                     <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-semibold">Urgent</span>
                   )}
                 </div>
-                <p className="text-xs text-slate-400">{item.desc}</p>
+                <p className="text-xs text-[var(--text-muted)]">{item.desc}</p>
               </div>
 
               {/* Type badge */}

@@ -33,12 +33,12 @@ const AccountantDashboard = () => {
         <Card>
           <CardHeader title="My Task Queue" />
           {loadTasks ? <div className="flex justify-center py-10"><Spinner /></div> : (
-            <div className="divide-y divide-slate-50">
+            <div className="divide-y divide-[var(--divide-color)]">
               {tasks.slice(0, 6).map(t => (
                 <div key={t._id} className="flex items-center justify-between px-5 py-3.5">
                   <div>
-                    <p className="text-sm font-bold text-slate-900">{t.title}</p>
-                    <p className="text-xs text-slate-400">{t.client?.name} • {t.period}</p>
+                    <p className="text-sm font-bold text-[var(--text-primary)]">{t.title}</p>
+                    <p className="text-xs text-[var(--text-muted)]">{t.client?.name} • {t.period}</p>
                   </div>
                   <div className="flex items-center gap-2">
                     <StatusBadge status={t.priority} />
@@ -46,7 +46,7 @@ const AccountantDashboard = () => {
                   </div>
                 </div>
               ))}
-              {tasks.length === 0 && <p className="text-center text-slate-400 text-sm py-6">No tasks assigned yet.</p>}
+              {tasks.length === 0 && <p className="text-center text-[var(--text-muted)] text-sm py-6">No tasks assigned yet.</p>}
             </div>
           )}
         </Card>
@@ -55,17 +55,17 @@ const AccountantDashboard = () => {
         <Card>
           <CardHeader title="Recent Client Documents" />
           {loadDocs ? <div className="flex justify-center py-10"><Spinner /></div> : (
-            <div className="divide-y divide-slate-50">
+            <div className="divide-y divide-[var(--divide-color)]">
               {docs.slice(0, 6).map(doc => (
                 <div key={doc._id} className="flex items-center justify-between px-5 py-3.5">
                   <div>
-                    <p className="text-sm font-semibold text-slate-900">{doc.name}</p>
-                    <p className="text-xs text-slate-400">{doc.category} • {doc.client?.name}</p>
+                    <p className="text-sm font-semibold text-[var(--text-primary)]">{doc.name}</p>
+                    <p className="text-xs text-[var(--text-muted)]">{doc.category} • {doc.client?.name}</p>
                   </div>
                   <StatusBadge status={doc.status} />
                 </div>
               ))}
-              {docs.length === 0 && <p className="text-center text-slate-400 text-sm py-6">No documents uploaded yet.</p>}
+              {docs.length === 0 && <p className="text-center text-[var(--text-muted)] text-sm py-6">No documents uploaded yet.</p>}
             </div>
           )}
         </Card>

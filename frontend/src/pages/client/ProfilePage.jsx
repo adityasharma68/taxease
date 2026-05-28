@@ -75,15 +75,15 @@ const ProfilePage = () => {
       {/* ── Account Summary Card ───────────────────────────────────── */}
       <div className="bg-gradient-to-r from-indigo-600 to-indigo-800 rounded-2xl p-6 text-white">
         <div className="flex items-center gap-4">
-          <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center text-2xl font-bold">
+          <div className="w-16 h-16 bg-[var(--bg-surface)]/20 rounded-2xl flex items-center justify-center text-2xl font-bold">
             {user?.name?.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase()}
           </div>
           <div>
             <h2 className="text-xl font-bold">{user?.name}</h2>
             <p className="text-indigo-200 text-sm">{user?.email}</p>
             <div className="flex items-center gap-2 mt-1">
-              <span className="bg-white/20 text-white text-xs px-2 py-0.5 rounded-full capitalize">{user?.role}</span>
-              <span className="bg-white/20 text-white text-xs px-2 py-0.5 rounded-full">{user?.plan} Plan</span>
+              <span className="bg-[var(--bg-surface)]/20 text-white text-xs px-2 py-0.5 rounded-full capitalize">{user?.role}</span>
+              <span className="bg-[var(--bg-surface)]/20 text-white text-xs px-2 py-0.5 rounded-full">{user?.plan} Plan</span>
             </div>
           </div>
         </div>
@@ -97,27 +97,27 @@ const ProfilePage = () => {
             <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center">
               <User size={16} className="text-indigo-600" />
             </div>
-            <h3 className="font-bold text-slate-900">Personal Information</h3>
+            <h3 className="font-bold text-[var(--text-primary)]">Personal Information</h3>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">Full Name *</label>
+              <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">Full Name *</label>
               <input name="name" value={form.name} onChange={handleChange} required
-                className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
+                className="w-full px-4 py-2.5 border border-[var(--border-subtle)] rounded-xl text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
                 placeholder="Rahul Sharma" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">Phone Number *</label>
+              <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">Phone Number *</label>
               <input name="phone" value={form.phone} onChange={handleChange} required
-                className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
+                className="w-full px-4 py-2.5 border border-[var(--border-subtle)] rounded-xl text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
                 placeholder="9876543210" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">Email Address</label>
-              <div className="flex items-center gap-2 px-4 py-2.5 border border-slate-100 bg-slate-50 rounded-xl text-sm text-slate-500">
+              <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">Email Address</label>
+              <div className="flex items-center gap-2 px-4 py-2.5 border border-[var(--border-subtle)] bg-[var(--bg-surface-2)] rounded-xl text-sm text-[var(--text-muted)]">
                 <Mail size={14} />
                 {user?.email}
-                <span className="ml-auto text-xs text-slate-400">(cannot change)</span>
+                <span className="ml-auto text-xs text-[var(--text-muted)]">(cannot change)</span>
               </div>
             </div>
           </div>
@@ -129,16 +129,16 @@ const ProfilePage = () => {
             <div className="w-8 h-8 bg-emerald-50 rounded-lg flex items-center justify-center">
               <ShieldCheck size={16} className="text-emerald-600" />
             </div>
-            <h3 className="font-bold text-slate-900">Tax Identifiers (KYC)</h3>
+            <h3 className="font-bold text-[var(--text-primary)]">Tax Identifiers (KYC)</h3>
           </div>
 
           {/* PAN */}
           <div className="mb-4">
-            <label className="block text-sm font-medium text-slate-700 mb-1.5">PAN Number</label>
+            <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">PAN Number</label>
             <div className="flex gap-2">
               <input name="pan" value={form.pan} onChange={handleChange}
                 maxLength={10}
-                className="flex-1 px-4 py-2.5 border border-slate-200 rounded-xl text-sm font-mono uppercase focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
+                className="flex-1 px-4 py-2.5 border border-[var(--border-subtle)] rounded-xl text-sm font-mono uppercase focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
                 placeholder="ABCDE1234F" />
               <button type="button" onClick={verifyPAN}
                 className={`px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 transition-all flex-shrink-0
@@ -150,11 +150,11 @@ const ProfilePage = () => {
 
           {/* GSTIN */}
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1.5">GSTIN</label>
+            <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">GSTIN</label>
             <div className="flex gap-2">
               <input name="gstin" value={form.gstin} onChange={handleChange}
                 maxLength={15}
-                className="flex-1 px-4 py-2.5 border border-slate-200 rounded-xl text-sm font-mono uppercase focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
+                className="flex-1 px-4 py-2.5 border border-[var(--border-subtle)] rounded-xl text-sm font-mono uppercase focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
                 placeholder="27ABCDE1234F1Z5" />
               <button type="button" onClick={verifyGSTIN}
                 className={`px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 transition-all flex-shrink-0
@@ -162,7 +162,7 @@ const ProfilePage = () => {
                 {verified.gstin ? <><CheckCircle size={14} /> Verified</> : "Verify"}
               </button>
             </div>
-            <p className="text-xs text-slate-400 mt-1.5">15-digit GST Identification Number</p>
+            <p className="text-xs text-[var(--text-muted)] mt-1.5">15-digit GST Identification Number</p>
           </div>
         </Card>
 
@@ -172,25 +172,25 @@ const ProfilePage = () => {
             <div className="w-8 h-8 bg-amber-50 rounded-lg flex items-center justify-center">
               <Building2 size={16} className="text-amber-600" />
             </div>
-            <h3 className="font-bold text-slate-900">Business Address</h3>
+            <h3 className="font-bold text-[var(--text-primary)]">Business Address</h3>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">Street Address</label>
+              <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">Street Address</label>
               <input name="address" value={form.address} onChange={handleChange}
-                className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
+                className="w-full px-4 py-2.5 border border-[var(--border-subtle)] rounded-xl text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
                 placeholder="123, MG Road, Sector 5" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">City</label>
+              <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">City</label>
               <input name="city" value={form.city} onChange={handleChange}
-                className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
+                className="w-full px-4 py-2.5 border border-[var(--border-subtle)] rounded-xl text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
                 placeholder="Mumbai" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">State</label>
+              <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">State</label>
               <select name="state" value={form.state} onChange={handleChange}
-                className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-white focus:border-indigo-500 outline-none">
+                className="w-full px-4 py-2.5 border border-[var(--border-subtle)] rounded-xl text-sm bg-[var(--bg-surface)] focus:border-indigo-500 outline-none">
                 <option value="">Select state</option>
                 {["Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Delhi","Goa","Gujarat","Haryana","Himachal Pradesh","Jharkhand","Karnataka","Kerala","Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Odisha","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana","Tripura","Uttar Pradesh","Uttarakhand","West Bengal"].map(s => (
                   <option key={s}>{s}</option>
@@ -198,10 +198,10 @@ const ProfilePage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">PIN Code</label>
+              <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">PIN Code</label>
               <input name="pincode" value={form.pincode} onChange={handleChange}
                 maxLength={6}
-                className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
+                className="w-full px-4 py-2.5 border border-[var(--border-subtle)] rounded-xl text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
                 placeholder="400001" />
             </div>
           </div>

@@ -49,7 +49,7 @@ const ActivityFeed = () => {
 
   if (activities.length === 0) {
     return (
-      <div className="text-center py-8 text-slate-400">
+      <div className="text-center py-8 text-[var(--text-muted)]">
         <Clock size={28} className="mx-auto mb-2 opacity-40" />
         <p className="text-sm">No recent activity yet.</p>
       </div>
@@ -61,20 +61,20 @@ const ActivityFeed = () => {
       {activities.map((act, i) => {
         const cfg = EVENT_CONFIG[act.type] || EVENT_CONFIG["doc_uploaded"];
         return (
-          <div key={act.id} className="flex items-start gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors">
+          <div key={act.id} className="flex items-start gap-3 p-3 rounded-xl hover:bg-[var(--bg-surface-2)] transition-colors">
             {/* Icon + vertical line */}
             <div className="flex flex-col items-center">
               <div className={`w-8 h-8 ${cfg.color} rounded-lg flex items-center justify-center flex-shrink-0`}>
                 <cfg.icon size={14} />
               </div>
               {i < activities.length - 1 && (
-                <div className="w-px h-4 bg-slate-200 mt-1" />
+                <div className="w-px h-4 bg-[var(--bg-hover)] mt-1" />
               )}
             </div>
             <div className="flex-1 min-w-0 pb-1">
-              <p className="text-sm font-semibold text-slate-900 truncate">{act.title}</p>
-              <p className="text-xs text-slate-500 truncate">{act.desc}</p>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-sm font-semibold text-[var(--text-primary)] truncate">{act.title}</p>
+              <p className="text-xs text-[var(--text-muted)] truncate">{act.desc}</p>
+              <p className="text-xs text-[var(--text-muted)] mt-0.5">
                 {new Date(act.time).toLocaleDateString("en-IN", { day:"numeric", month:"short", hour:"2-digit", minute:"2-digit" })}
               </p>
             </div>

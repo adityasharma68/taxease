@@ -39,7 +39,7 @@ const AdminDashboard = () => {
             action={<Link to="/admin/clients" className="text-xs text-indigo-600 font-medium hover:underline">View all →</Link>}
           />
           {loadUsers ? <div className="flex justify-center py-10"><Spinner /></div> : (
-            <div className="divide-y divide-slate-50">
+            <div className="divide-y divide-[var(--divide-color)]">
               {clients.slice(0, 6).map(c => (
                 <div key={c._id} className="flex items-center justify-between px-5 py-3.5">
                   <div className="flex items-center gap-3">
@@ -47,21 +47,21 @@ const AdminDashboard = () => {
                       {c.name.split(" ").map(n => n[0]).join("").slice(0, 2)}
                     </div>
                     <div>
-                      <p className="text-sm font-semibold text-slate-900">{c.name}</p>
-                      <p className="text-xs text-slate-400">{c.plan} Plan</p>
+                      <p className="text-sm font-semibold text-[var(--text-primary)]">{c.name}</p>
+                      <p className="text-xs text-[var(--text-muted)]">{c.plan} Plan</p>
                     </div>
                   </div>
                   <StatusBadge status={c.isActive ? "Active" : "Inactive"} />
                 </div>
               ))}
-              {clients.length === 0 && <p className="text-center text-slate-400 text-sm py-6">No clients found.</p>}
+              {clients.length === 0 && <p className="text-center text-[var(--text-muted)] text-sm py-6">No clients found.</p>}
             </div>
           )}
         </Card>
 
         {/* Filing status breakdown */}
         <Card className="p-5">
-          <h3 className="font-bold text-slate-900 mb-5">Filing Status Breakdown</h3>
+          <h3 className="font-bold text-[var(--text-primary)] mb-5">Filing Status Breakdown</h3>
           {loadFilings ? <div className="flex justify-center py-6"><Spinner /></div> : (
             <div className="space-y-4">
               {[
@@ -71,10 +71,10 @@ const AdminDashboard = () => {
               ].map(s => (
                 <div key={s.label}>
                   <div className="flex justify-between text-sm mb-1.5">
-                    <span className="font-medium text-slate-700">{s.label}</span>
-                    <span className="text-slate-500">{s.count} / {s.total || 1}</span>
+                    <span className="font-medium text-[var(--text-secondary)]">{s.label}</span>
+                    <span className="text-[var(--text-muted)]">{s.count} / {s.total || 1}</span>
                   </div>
-                  <div className="w-full bg-slate-100 rounded-full h-2">
+                  <div className="w-full bg-[var(--bg-surface-2)] rounded-full h-2">
                     <div
                       className={`${s.color} h-2 rounded-full transition-all`}
                       style={{ width: `${s.total ? ((s.count / s.total) * 100).toFixed(0) : 0}%` }}
@@ -92,9 +92,9 @@ const AdminDashboard = () => {
               { label: "ITR",  val: filings.filter(f=>f.type.startsWith("ITR")).length  },
               { label: "TDS",  val: filings.filter(f=>f.type==="TDS Return").length     },
             ].map(t => (
-              <div key={t.label} className="bg-slate-50 rounded-xl p-3 text-center">
-                <div className="text-xl font-black text-slate-900">{t.val}</div>
-                <div className="text-xs text-slate-500 font-medium">{t.label}</div>
+              <div key={t.label} className="bg-[var(--bg-surface-2)] rounded-xl p-3 text-center">
+                <div className="text-xl font-black text-[var(--text-primary)]">{t.val}</div>
+                <div className="text-xs text-[var(--text-muted)] font-medium">{t.label}</div>
               </div>
             ))}
           </div>

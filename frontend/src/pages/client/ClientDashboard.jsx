@@ -61,7 +61,7 @@ const ClientDashboard = () => {
               <Link to="/client/filings" className="text-xs text-indigo-600 font-medium hover:underline">View all →</Link>
             } />
             {loading ? <div className="flex justify-center py-10"><Spinner /></div> : (
-              <div className="divide-y divide-slate-50">
+              <div className="divide-y divide-[var(--divide-color)]">
                 {filings.slice(0,5).map(f => (
                   <div key={f._id} className="flex items-center justify-between px-5 py-3.5">
                     <div className="flex items-center gap-3">
@@ -69,8 +69,8 @@ const ClientDashboard = () => {
                         <FileText size={14} className="text-indigo-600" />
                       </div>
                       <div>
-                        <p className="text-sm font-semibold text-slate-900">{f.type}</p>
-                        <p className="text-xs text-slate-400">{f.period} • Due: {new Date(f.dueDate).toLocaleDateString("en-IN")}</p>
+                        <p className="text-sm font-semibold text-[var(--text-primary)]">{f.type}</p>
+                        <p className="text-xs text-[var(--text-muted)]">{f.period} • Due: {new Date(f.dueDate).toLocaleDateString("en-IN")}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
@@ -83,7 +83,7 @@ const ClientDashboard = () => {
                     </div>
                   </div>
                 ))}
-                {filings.length === 0 && <p className="text-center text-slate-400 text-sm py-8">No filings yet.</p>}
+                {filings.length === 0 && <p className="text-center text-[var(--text-muted)] text-sm py-8">No filings yet.</p>}
               </div>
             )}
           </Card>
@@ -92,13 +92,13 @@ const ClientDashboard = () => {
         {/* Deadlines */}
         <Card>
           <CardHeader title="Upcoming Deadlines" />
-          <div className="divide-y divide-slate-50">
+          <div className="divide-y divide-[var(--divide-color)]">
             {DEADLINES.map((item,i) => (
               <div key={i} className="flex items-center gap-3 px-5 py-3">
-                <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${item.urgent ? "bg-red-500":"bg-slate-300"}`} />
+                <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${item.urgent ? "bg-red-500":"bg-[var(--border-default)]"}`} />
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-slate-900">{item.event}</p>
-                  <p className="text-xs text-slate-400">{item.date}</p>
+                  <p className="text-sm font-medium text-[var(--text-primary)]">{item.event}</p>
+                  <p className="text-xs text-[var(--text-muted)]">{item.date}</p>
                 </div>
                 <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${item.type==="GST"?"bg-indigo-50 text-indigo-700":item.type==="TDS"?"bg-amber-50 text-amber-700":"bg-emerald-50 text-emerald-700"}`}>
                   {item.type}
@@ -138,11 +138,11 @@ const ClientDashboard = () => {
 
           {/* Quick actions */}
           <Card className="p-5">
-            <h3 className="font-bold text-slate-900 text-sm mb-3">Quick Actions</h3>
+            <h3 className="font-bold text-[var(--text-primary)] text-sm mb-3">Quick Actions</h3>
             <div className="space-y-2">
               {[
                 { to:"/client/upload",   label:"Upload Documents",    color:"bg-indigo-600 hover:bg-indigo-700" },
-                { to:"/client/filings",  label:"View Filing History", color:"bg-slate-100 hover:bg-slate-200 text-slate-700" },
+                { to:"/client/filings",  label:"View Filing History", color:"bg-[var(--bg-surface-2)] hover:bg-[var(--bg-hover)] text-[var(--text-secondary)]" },
                 { to:"/client/chat",     label:"Chat with CA",        color:"bg-emerald-600 hover:bg-emerald-700" },
                 { to:"/client/payments", label:"Pay Invoices",        color:"bg-purple-600 hover:bg-purple-700" },
               ].map(a => (

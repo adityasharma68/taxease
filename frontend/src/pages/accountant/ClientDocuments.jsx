@@ -31,7 +31,7 @@ const ClientDocuments = () => {
         {["All", "GST", "ITR", "TDS", "Business Registration", "Other"].map(cat => (
           <button key={cat} onClick={() => setCategoryFilter(cat)}
             className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all
-              ${categoryFilter === cat ? "bg-indigo-600 text-white" : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-50"}`}>
+              ${categoryFilter === cat ? "bg-indigo-600 text-white" : "bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:bg-[var(--bg-surface-2)]"}`}>
             {cat}
           </button>
         ))}
@@ -47,39 +47,39 @@ const ClientDocuments = () => {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="bg-slate-50">
+                <tr className="bg-[var(--bg-surface-2)]">
                   {["Document", "Client", "Category", "Period", "Size", "Uploaded", "Status", "Actions"].map(h => (
-                    <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">{h}</th>
+                    <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wide whitespace-nowrap">{h}</th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-50">
+              <tbody className="divide-y divide-[var(--divide-color)]">
                 {filtered.map(doc => (
-                  <tr key={doc._id} className="hover:bg-slate-50 transition-colors">
+                  <tr key={doc._id} className="hover:bg-[var(--bg-surface-2)] transition-colors">
                     <td className="px-4 py-3.5">
                       <div className="flex items-center gap-2.5">
-                        <div className="w-7 h-7 bg-slate-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                          <FileText size={13} className="text-slate-500" />
+                        <div className="w-7 h-7 bg-[var(--bg-surface-2)] rounded-lg flex items-center justify-center flex-shrink-0">
+                          <FileText size={13} className="text-[var(--text-muted)]" />
                         </div>
-                        <span className="text-sm font-medium text-slate-900 max-w-[140px] truncate">{doc.name}</span>
+                        <span className="text-sm font-medium text-[var(--text-primary)] max-w-[140px] truncate">{doc.name}</span>
                       </div>
                     </td>
-                    <td className="px-4 py-3.5 text-sm text-slate-700">{doc.client?.name || "—"}</td>
+                    <td className="px-4 py-3.5 text-sm text-[var(--text-secondary)]">{doc.client?.name || "—"}</td>
                     <td className="px-4 py-3.5">
                       <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${doc.category === "GST" ? "bg-indigo-100 text-indigo-800" : doc.category === "ITR" ? "bg-emerald-100 text-emerald-800" : "bg-amber-100 text-amber-800"}`}>
                         {doc.category}
                       </span>
                     </td>
-                    <td className="px-4 py-3.5 text-sm text-slate-600 whitespace-nowrap">{doc.period}</td>
-                    <td className="px-4 py-3.5 text-sm text-slate-500">{doc.size}</td>
-                    <td className="px-4 py-3.5 text-sm text-slate-500 whitespace-nowrap">
+                    <td className="px-4 py-3.5 text-sm text-[var(--text-secondary)] whitespace-nowrap">{doc.period}</td>
+                    <td className="px-4 py-3.5 text-sm text-[var(--text-muted)]">{doc.size}</td>
+                    <td className="px-4 py-3.5 text-sm text-[var(--text-muted)] whitespace-nowrap">
                       {new Date(doc.createdAt).toLocaleDateString("en-IN")}
                     </td>
                     <td className="px-4 py-3.5"><StatusBadge status={doc.status} /></td>
                     <td className="px-4 py-3.5">
                       <div className="flex items-center gap-2">
                         <a href={doc.fileUrl} target="_blank" rel="noreferrer"
-                          className="text-slate-400 hover:text-indigo-600 transition-colors" title="Download">
+                          className="text-[var(--text-muted)] hover:text-indigo-600 transition-colors" title="Download">
                           <Download size={14} />
                         </a>
                         {doc.status === "Pending" && (

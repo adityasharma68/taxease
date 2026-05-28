@@ -75,12 +75,12 @@ const Sidebar = () => {
         )}
         {mobile ? (
           <button onClick={() => setMobileOpen(false)}
-            className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition">
+            className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-[var(--bg-surface)]/10 transition">
             <X size={16} />
           </button>
         ) : (
           <button onClick={() => setCollapsed(!collapsed)}
-            className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition">
+            className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-[var(--bg-surface)]/10 transition">
             {collapsed ? <ChevronRight size={15} /> : <ChevronLeft size={15} />}
           </button>
         )}
@@ -96,7 +96,7 @@ const Sidebar = () => {
               `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200
                ${isActive
                  ? "bg-indigo-600/20 text-white border border-indigo-500/25"
-                 : "text-gray-400 hover:text-white hover:bg-white/[0.06]"}
+                 : "text-gray-400 hover:text-white hover:bg-[var(--bg-surface)]/[0.06]"}
                ${collapsed && !mobile ? "justify-center" : ""}`}>
             {({ isActive }) => (
               <>
@@ -111,7 +111,7 @@ const Sidebar = () => {
       {/* Theme switcher */}
       {(!collapsed || mobile) && (
         <div className="px-3 py-3 border-t border-white/[0.07]">
-          <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-600 mb-2 px-1">Theme</p>
+          <p className="text-[10px] font-semibold uppercase tracking-widest text-[var(--text-secondary)] mb-2 px-1">Theme</p>
           <ThemeSwitcher />
         </div>
       )}
