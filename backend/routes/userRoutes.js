@@ -1,26 +1,38 @@
-// ─── routes/userRoutes.js ─────────────────────────────────────────────────────
-
 const express = require("express");
 const router  = express.Router();
-const { getAllUsers, getUserById, updateUser, deleteUser, assignAccountant } = require("../controllers/userController");
+const multer  = require("multer");
 const { protect, authorizeRoles } = require("../middleware/authMiddleware");
+const {
+  getAllUsers, getUserById, updateUser, updateAvatar,
+  changeEmail, changePassword, deleteUser, assignAccountant,
+} = require("../controllers/userController");
 
-// All user routes require authentication
 router.use(protect);
 
-// GET    /api/users          — list all users (admin only)
-router.get("/", authorizeRoles("admin"), getAllUsers);
+// Avatar multer
+const avatarUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 5 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    file.mimetype.startsWith("image/") ? cb(null, true) : cb(new Error("Images only"), false);
+  },
+}).single("avatar");
 
-// GET    /api/users/:id      — get one user
-router.get("/:id", getUserById);
+// ── GET /api/users
+// Admin → all users
+// Accountant → only their assigned clients (filtered in controller)
+// Client/others → 403
+router.get("/",
+  authorizeRoles("admin", "accountant"),
+  getAllUsers
+);
 
-// PUT    /api/users/:id      — update user
-router.put("/:id", updateUser);
-
-// DELETE /api/users/:id      — deactivate user (admin only)
-router.delete("/:id", authorizeRoles("admin"), deleteUser);
-
-// PUT    /api/users/:id/assign — assign accountant to client (admin only)
-router.put("/:id/assign", authorizeRoles("admin"), assignAccountant);
+router.get   ("/:id",         getUserById);
+router.put   ("/:id",         updateUser);
+router.put   ("/:id/avatar",  (req, res, next) => { avatarUpload(req, res, err => { if (err) return res.status(400).json({ success:false, message:err.message }); next(); }); }, updateAvatar);
+router.put   ("/:id/email",   changeEmail);
+router.put   ("/:id/password",changePassword);
+router.delete("/:id",         authorizeRoles("admin"), deleteUser);
+router.put   ("/:id/assign",  authorizeRoles("admin"), assignAccountant);
 
 module.exports = router;

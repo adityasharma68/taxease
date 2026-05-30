@@ -1,4 +1,4 @@
-// src/App.jsx — Root routes (NO AuthProvider here — already in main.jsx)
+// src/App.jsx
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { useAuth } from "./context/AuthContext";
@@ -27,6 +27,7 @@ import ManageTasks    from "./pages/admin/ManageTasks";
 import AdminReports   from "./pages/admin/AdminReports";
 import AdminReminders from "./pages/admin/AdminReminders";
 import DocumentInbox  from "./pages/admin/DocumentInbox";
+import AdminProfile   from "./pages/admin/AdminProfile";
 
 // Accountant
 import AccountantLayout    from "./components/accountant/AccountantLayout";
@@ -34,74 +35,72 @@ import AccountantDashboard from "./pages/accountant/AccountantDashboard";
 import AccountantTasks     from "./pages/accountant/AccountantTasks";
 import ClientDocuments     from "./pages/accountant/ClientDocuments";
 import AccountantChat      from "./pages/accountant/AccountantChat";
+import AccountantProfile   from "./pages/accountant/AccountantProfile";
 
-// Redirect logged-in users away from home page
 const HomeRedirect = () => {
   const { user } = useAuth();
   if (!user) return <HomePage />;
-  const map = {
-    client:     "/client/dashboard",
-    admin:      "/admin/dashboard",
-    accountant: "/accountant/dashboard",
-  };
-  return <Navigate to={map[user.role] || "/"} replace />;
+  const map = { client:"/client/dashboard", admin:"/admin/dashboard", accountant:"/accountant/dashboard" };
+  return <Navigate to={map[user.role]||"/"} replace />;
 };
 
 export default function App() {
   return (
     <>
-      <Toaster
-        position="top-right"
+      <Toaster position="top-right"
         toastOptions={{
           duration: 3000,
-          style: { fontFamily: "Outfit, sans-serif", fontSize: "14px" },
-          success: { iconTheme: { primary: "#6366f1", secondary: "#fff" } },
-        }}
-      />
+          style: { fontFamily:"Outfit,sans-serif", fontSize:"14px",
+                   background:"var(--bg-surface)", color:"var(--text-primary)",
+                   border:"1px solid var(--border-default)" },
+          success: { iconTheme:{ primary:"#6366f1", secondary:"#fff" } },
+        }} />
+
       <Routes>
-        <Route path="/"         element={<HomeRedirect />} />
-        <Route path="/login"    element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/"         element={<HomeRedirect/>} />
+        <Route path="/login"    element={<LoginPage/>} />
+        <Route path="/register" element={<RegisterPage/>} />
 
-        {/* ── Client ───────────────────────────────────────────── */}
-        <Route element={<ProtectedRoute allowedRoles={["client"]} />}>
-          <Route element={<ClientLayout />}>
-            <Route path="/client/dashboard" element={<ClientDashboard />} />
-            <Route path="/client/upload"    element={<UploadDocuments />} />
-            <Route path="/client/filings"   element={<FilingHistory />} />
-            <Route path="/client/payments"  element={<PaymentsPage />} />
-            <Route path="/client/calendar"  element={<ClientCalendar />} />
-            <Route path="/client/chat"      element={<ClientChat />} />
-            <Route path="/client/profile"   element={<ProfilePage />} />
+        {/* ── Client ── */}
+        <Route element={<ProtectedRoute allowedRoles={["client"]}/>}>
+          <Route element={<ClientLayout/>}>
+            <Route path="/client/dashboard" element={<ClientDashboard/>}/>
+            <Route path="/client/upload"    element={<UploadDocuments/>}/>
+            <Route path="/client/filings"   element={<FilingHistory/>}/>
+            <Route path="/client/payments"  element={<PaymentsPage/>}/>
+            <Route path="/client/calendar"  element={<ClientCalendar/>}/>
+            <Route path="/client/chat"      element={<ClientChat/>}/>
+            <Route path="/client/profile"   element={<ProfilePage/>}/>
           </Route>
         </Route>
 
-        {/* ── Admin ────────────────────────────────────────────── */}
-        <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
-          <Route element={<AdminLayout />}>
-            <Route path="/admin/dashboard" element={<AdminDashboard />} />
-            <Route path="/admin/clients"   element={<ManageClients />} />
-            <Route path="/admin/filings"   element={<ManageFilings />} />
-            <Route path="/admin/tasks"     element={<ManageTasks />} />
-            <Route path="/admin/reports"   element={<AdminReports />} />
-            <Route path="/admin/reminders" element={<AdminReminders />} />
-            {/* Both paths work — sidebar uses /admin/documents */}
-            <Route path="/admin/documents" element={<DocumentInbox />} />
-            <Route path="/admin/inbox"     element={<DocumentInbox />} />
+        {/* ── Admin ── */}
+        <Route element={<ProtectedRoute allowedRoles={["admin"]}/>}>
+          <Route element={<AdminLayout/>}>
+            <Route path="/admin/dashboard" element={<AdminDashboard/>}/>
+            <Route path="/admin/clients"   element={<ManageClients/>}/>
+            <Route path="/admin/filings"   element={<ManageFilings/>}/>
+            <Route path="/admin/documents" element={<DocumentInbox/>}/>
+            <Route path="/admin/inbox"     element={<DocumentInbox/>}/>
+            <Route path="/admin/tasks"     element={<ManageTasks/>}/>
+            <Route path="/admin/reports"   element={<AdminReports/>}/>
+            <Route path="/admin/reminders" element={<AdminReminders/>}/>
+            <Route path="/admin/profile"   element={<AdminProfile/>}/>
           </Route>
         </Route>
 
-        {/* ── Accountant ───────────────────────────────────────── */}
-        <Route element={<ProtectedRoute allowedRoles={["accountant"]} />}>
-          <Route element={<AccountantLayout />}>
-            <Route path="/accountant/dashboard" element={<AccountantDashboard />} />
-            <Route path="/accountant/tasks"     element={<AccountantTasks />} />
-            <Route path="/accountant/documents" element={<ClientDocuments />} />
-            <Route path="/accountant/chat"      element={<AccountantChat />} />
+        {/* ── Accountant ── */}
+        <Route element={<ProtectedRoute allowedRoles={["accountant"]}/>}>
+          <Route element={<AccountantLayout/>}>
+            <Route path="/accountant/dashboard" element={<AccountantDashboard/>}/>
+            <Route path="/accountant/tasks"     element={<AccountantTasks/>}/>
+            <Route path="/accountant/documents" element={<ClientDocuments/>}/>
+            <Route path="/accountant/chat"      element={<AccountantChat/>}/>
+            <Route path="/accountant/profile"   element={<AccountantProfile/>}/>
           </Route>
         </Route>
 
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<Navigate to="/" replace/>}/>
       </Routes>
     </>
   );

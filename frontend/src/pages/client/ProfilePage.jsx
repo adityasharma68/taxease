@@ -1,17 +1,25 @@
-// src/pages/client/ProfilePage.jsx
-// Client profile & KYC — update name, phone, PAN, GSTIN, business details
-// ─────────────────────────────────────────────────────────────────────────────
-
+// src/pages/client/ProfilePage.jsx — Client profile with KYC
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../api/axios";
 import toast from "react-hot-toast";
-import { PageHeader, Card, Spinner } from "../../components/common/UI";
-import { User, Building2, ShieldCheck, Phone, Mail, Save, CheckCircle } from "lucide-react";
+import { User, Building2, ShieldCheck, Phone, Save, CheckCircle, CreditCard, Briefcase, MapPin } from "lucide-react";
+import {
+  AvatarSection, ChangeEmailSection, ChangePasswordSection,
+  SectionCard, TInput, TSelect, FieldLabel,
+} from "../../components/profile/ProfileBase";
+
+const STATES = [
+  "Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh",
+  "Goa","Gujarat","Haryana","Himachal Pradesh","Jharkhand","Karnataka",
+  "Kerala","Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram",
+  "Nagaland","Odisha","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana",
+  "Tripura","Uttar Pradesh","Uttarakhand","West Bengal","Delhi",
+  "Jammu & Kashmir","Ladakh","Puducherry","Chandigarh",
+];
 
 const ProfilePage = () => {
   const { user, updateUser } = useAuth();
-
   const [form, setForm] = useState({
     name:    user?.name    || "",
     phone:   user?.phone   || "",
@@ -22,199 +30,166 @@ const ProfilePage = () => {
     state:   user?.state   || "",
     pincode: user?.pincode || "",
   });
-
   const [loading,  setLoading]  = useState(false);
-  const [verified, setVerified] = useState({ pan: false, gstin: false });
+  const [verified, setVerified] = useState({ pan: !!user?.pan, gstin: !!user?.gstin });
 
-  const handleChange = (e) => setForm(p => ({ ...p, [e.target.name]: e.target.value }));
+  const h = e => setForm(p => ({ ...p, [e.target.name]: e.target.value }));
 
-  // ── Save profile ─────────────────────────────────────────────────────────
-  const handleSave = async (e) => {
-    e.preventDefault();
+  const save = async (e) => {
+    e?.preventDefault();
+    if (!form.name.trim()) { toast.error("Name is required"); return; }
     setLoading(true);
     try {
       const { data } = await api.put(`/users/${user._id}`, form);
-      updateUser(data.user);          // Update global auth state
-      toast.success("Profile updated successfully!");
+      updateUser(data.user);
+      toast.success("Profile updated!");
     } catch (err) {
       toast.error(err.response?.data?.message || "Update failed");
-    } finally {
-      setLoading(false);
-    }
+    } finally { setLoading(false); }
   };
 
-  // ── Mock GSTIN verification (replace with real API in production) ─────────
-  const verifyGSTIN = async () => {
-    if (!form.gstin || form.gstin.length !== 15) {
-      toast.error("Please enter a valid 15-digit GSTIN"); return;
-    }
-    toast.loading("Verifying GSTIN...", { id: "gstin" });
-    await new Promise(r => setTimeout(r, 1500));   // simulate API call
-    toast.success("GSTIN verified successfully!", { id: "gstin" });
-    setVerified(p => ({ ...p, gstin: true }));
-  };
-
-  // ── Mock PAN verification ─────────────────────────────────────────────────
-  const verifyPAN = async () => {
-    if (!form.pan || form.pan.length !== 10) {
-      toast.error("Please enter a valid 10-character PAN"); return;
-    }
-    toast.loading("Verifying PAN...", { id: "pan" });
+  const verify = async (field) => {
+    const val = form[field];
+    if (field === "pan"   && val.length !== 10) { toast.error("PAN must be 10 characters"); return; }
+    if (field === "gstin" && val.length !== 15) { toast.error("GSTIN must be 15 characters"); return; }
+    const tid = toast.loading(`Verifying ${field.toUpperCase()}…`);
     await new Promise(r => setTimeout(r, 1200));
-    toast.success("PAN verified successfully!", { id: "pan" });
-    setVerified(p => ({ ...p, pan: true }));
+    toast.success(`${field.toUpperCase()} verified!`, { id: tid });
+    setVerified(p => ({ ...p, [field]: true }));
   };
+
+  const SaveBtn = ({ color = "indigo" }) => (
+    <div className="flex justify-end pt-2">
+      <button onClick={save} disabled={loading}
+        className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold
+                    text-white bg-gradient-to-br from-${color}-500 to-${color}-600
+                    hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-50`}>
+        {loading
+          ? <><span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"/>Saving…</>
+          : <><Save size={14}/>Save Changes</>}
+      </button>
+    </div>
+  );
 
   return (
-    <div className="max-w-3xl space-y-6">
-      <PageHeader
-        title="Profile & KYC"
-        subtitle="Keep your business details and tax identifiers up to date"
-      />
-
-      {/* ── Account Summary Card ───────────────────────────────────── */}
-      <div className="bg-gradient-to-r from-indigo-600 to-indigo-800 rounded-2xl p-6 text-white">
-        <div className="flex items-center gap-4">
-          <div className="w-16 h-16 bg-[var(--bg-surface)]/20 rounded-2xl flex items-center justify-center text-2xl font-bold">
-            {user?.name?.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase()}
-          </div>
-          <div>
-            <h2 className="text-xl font-bold">{user?.name}</h2>
-            <p className="text-indigo-200 text-sm">{user?.email}</p>
-            <div className="flex items-center gap-2 mt-1">
-              <span className="bg-[var(--bg-surface)]/20 text-white text-xs px-2 py-0.5 rounded-full capitalize">{user?.role}</span>
-              <span className="bg-[var(--bg-surface)]/20 text-white text-xs px-2 py-0.5 rounded-full">{user?.plan} Plan</span>
-            </div>
-          </div>
-        </div>
+    <div className="max-w-3xl mx-auto space-y-5">
+      <div>
+        <h2 className="text-xl font-bold" style={{ color:"var(--text-primary)" }}>Profile & KYC</h2>
+        <p className="text-sm mt-0.5" style={{ color:"var(--text-muted)" }}>Manage your personal info, KYC and security settings</p>
       </div>
 
-      <form onSubmit={handleSave} className="space-y-6">
+      <AvatarSection />
 
-        {/* ── Personal Information ───────────────────────────────────── */}
-        <Card className="p-6">
-          <div className="flex items-center gap-2 mb-5">
-            <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center">
-              <User size={16} className="text-indigo-600" />
-            </div>
-            <h3 className="font-bold text-[var(--text-primary)]">Personal Information</h3>
+      {/* Personal info */}
+      <SectionCard icon={User} title="Personal Information" subtitle="Your name and contact details" accent="indigo">
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div><FieldLabel icon={User} label="Full Name" required/>
+              <TInput name="name" value={form.name} onChange={h} placeholder="Rahul Sharma" required/></div>
+            <div><FieldLabel icon={Phone} label="Phone Number"/>
+              <TInput name="phone" value={form.phone} onChange={h} placeholder="9876543210" type="tel"/></div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">Full Name *</label>
-              <input name="name" value={form.name} onChange={handleChange} required
-                className="w-full px-4 py-2.5 border border-[var(--border-subtle)] rounded-xl text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
-                placeholder="Rahul Sharma" />
+          <div>
+            <FieldLabel label="Email Address"/>
+            <div className="relative">
+              <TInput value={user?.email||""} disabled className="pr-28"/>
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-semibold
+                               px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                Change below
+              </span>
             </div>
+          </div>
+          <SaveBtn color="indigo"/>
+        </div>
+      </SectionCard>
+
+      {/* KYC */}
+      <SectionCard icon={ShieldCheck} title="Tax Identifiers (KYC)"
+        subtitle="PAN and GSTIN required for filing" accent="teal">
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* PAN */}
             <div>
-              <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">Phone Number *</label>
-              <input name="phone" value={form.phone} onChange={handleChange} required
-                className="w-full px-4 py-2.5 border border-[var(--border-subtle)] rounded-xl text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
-                placeholder="9876543210" />
+              <FieldLabel icon={CreditCard} label="PAN Number"/>
+              <div className="flex gap-2">
+                <TInput name="pan" value={form.pan} onChange={h}
+                  placeholder="ABCDE1234F" maxLength={10} className="uppercase flex-1"
+                  style={{ fontFamily:"monospace" }}/>
+                <button type="button" onClick={() => verify("pan")}
+                  className={`px-3 py-2.5 rounded-xl text-xs font-semibold flex-shrink-0 transition-all
+                    ${verified.pan
+                      ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                      : "bg-indigo-600 text-white hover:opacity-90"}`}>
+                  {verified.pan ? <><CheckCircle size={12} className="inline mr-1"/>OK</> : "Verify"}
+                </button>
+              </div>
             </div>
+            {/* GSTIN */}
             <div>
-              <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">Email Address</label>
-              <div className="flex items-center gap-2 px-4 py-2.5 border border-[var(--border-subtle)] bg-[var(--bg-surface-2)] rounded-xl text-sm text-[var(--text-muted)]">
-                <Mail size={14} />
-                {user?.email}
-                <span className="ml-auto text-xs text-[var(--text-muted)]">(cannot change)</span>
+              <FieldLabel icon={Briefcase} label="GSTIN"/>
+              <div className="flex gap-2">
+                <TInput name="gstin" value={form.gstin} onChange={h}
+                  placeholder="27ABCDE1234F1Z5" maxLength={15} className="uppercase flex-1"
+                  style={{ fontFamily:"monospace" }}/>
+                <button type="button" onClick={() => verify("gstin")}
+                  className={`px-3 py-2.5 rounded-xl text-xs font-semibold flex-shrink-0 transition-all
+                    ${verified.gstin
+                      ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                      : "bg-indigo-600 text-white hover:opacity-90"}`}>
+                  {verified.gstin ? <><CheckCircle size={12} className="inline mr-1"/>OK</> : "Verify"}
+                </button>
               </div>
             </div>
           </div>
-        </Card>
 
-        {/* ── Tax Identifiers (KYC) ──────────────────────────────────── */}
-        <Card className="p-6">
-          <div className="flex items-center gap-2 mb-5">
-            <div className="w-8 h-8 bg-emerald-50 rounded-lg flex items-center justify-center">
-              <ShieldCheck size={16} className="text-emerald-600" />
+          <p className="text-xs font-semibold uppercase tracking-wider pt-1" style={{ color:"var(--text-muted)" }}>Business Address</p>
+          <div><FieldLabel icon={MapPin} label="Street Address"/>
+            <TInput name="address" value={form.address} onChange={h} placeholder="123, MG Road"/></div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div className="col-span-2 sm:col-span-1">
+              <FieldLabel label="City"/>
+              <TInput name="city" value={form.city} onChange={h} placeholder="Mumbai"/>
             </div>
-            <h3 className="font-bold text-[var(--text-primary)]">Tax Identifiers (KYC)</h3>
-          </div>
-
-          {/* PAN */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">PAN Number</label>
-            <div className="flex gap-2">
-              <input name="pan" value={form.pan} onChange={handleChange}
-                maxLength={10}
-                className="flex-1 px-4 py-2.5 border border-[var(--border-subtle)] rounded-xl text-sm font-mono uppercase focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
-                placeholder="ABCDE1234F" />
-              <button type="button" onClick={verifyPAN}
-                className={`px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 transition-all flex-shrink-0
-                  ${verified.pan ? "bg-emerald-50 text-emerald-700 border border-emerald-200" : "bg-indigo-600 text-white hover:bg-indigo-700"}`}>
-                {verified.pan ? <><CheckCircle size={14} /> Verified</> : "Verify"}
-              </button>
+            <div className="col-span-2">
+              <FieldLabel label="State"/>
+              <TSelect name="state" value={form.state} onChange={h}>
+                <option value="">Select state…</option>
+                {STATES.map(s => <option key={s} value={s}>{s}</option>)}
+              </TSelect>
+            </div>
+            <div className="col-span-2 sm:col-span-1">
+              <FieldLabel label="Pincode"/>
+              <TInput name="pincode" value={form.pincode} onChange={h} placeholder="400001" maxLength={6} type="tel"/>
             </div>
           </div>
+          <SaveBtn color="teal"/>
+        </div>
+      </SectionCard>
 
-          {/* GSTIN */}
-          <div>
-            <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">GSTIN</label>
-            <div className="flex gap-2">
-              <input name="gstin" value={form.gstin} onChange={handleChange}
-                maxLength={15}
-                className="flex-1 px-4 py-2.5 border border-[var(--border-subtle)] rounded-xl text-sm font-mono uppercase focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
-                placeholder="27ABCDE1234F1Z5" />
-              <button type="button" onClick={verifyGSTIN}
-                className={`px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 transition-all flex-shrink-0
-                  ${verified.gstin ? "bg-emerald-50 text-emerald-700 border border-emerald-200" : "bg-indigo-600 text-white hover:bg-indigo-700"}`}>
-                {verified.gstin ? <><CheckCircle size={14} /> Verified</> : "Verify"}
-              </button>
-            </div>
-            <p className="text-xs text-[var(--text-muted)] mt-1.5">15-digit GST Identification Number</p>
-          </div>
-        </Card>
+      <ChangeEmailSection/>
+      <ChangePasswordSection/>
 
-        {/* ── Business Address ───────────────────────────────────────── */}
-        <Card className="p-6">
-          <div className="flex items-center gap-2 mb-5">
-            <div className="w-8 h-8 bg-amber-50 rounded-lg flex items-center justify-center">
-              <Building2 size={16} className="text-amber-600" />
+      {/* Account info */}
+      <div className="rounded-2xl p-5"
+        style={{ background:"var(--bg-surface)", border:"1px solid var(--border-subtle)" }}>
+        <p className="text-xs font-semibold uppercase tracking-wider mb-4" style={{ color:"var(--text-muted)" }}>Account Information</p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+          {[
+            ["Role",         user?.role?.charAt(0).toUpperCase()+user?.role?.slice(1)||"—"],
+            ["Plan",         user?.plan||"Basic"],
+            ["Status",       user?.isActive!==false?"Active":"Inactive"],
+            ["Assigned CA",  user?.assignedAccountant?.name||"Not assigned"],
+            ["Member Since", user?.createdAt ? new Date(user.createdAt).toLocaleDateString("en-IN",{year:"numeric",month:"short"}) : "—"],
+            ["User ID",      user?._id?.slice(-8).toUpperCase()||"—"],
+          ].map(([l,v]) => (
+            <div key={l}>
+              <p className="text-xs mb-0.5" style={{ color:"var(--text-muted)" }}>{l}</p>
+              <p className="text-sm font-semibold" style={{ color:"var(--text-primary)", fontFamily:l==="User ID"?"monospace":"inherit" }}>{v}</p>
             </div>
-            <h3 className="font-bold text-[var(--text-primary)]">Business Address</h3>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">Street Address</label>
-              <input name="address" value={form.address} onChange={handleChange}
-                className="w-full px-4 py-2.5 border border-[var(--border-subtle)] rounded-xl text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
-                placeholder="123, MG Road, Sector 5" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">City</label>
-              <input name="city" value={form.city} onChange={handleChange}
-                className="w-full px-4 py-2.5 border border-[var(--border-subtle)] rounded-xl text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
-                placeholder="Mumbai" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">State</label>
-              <select name="state" value={form.state} onChange={handleChange}
-                className="w-full px-4 py-2.5 border border-[var(--border-subtle)] rounded-xl text-sm bg-[var(--bg-surface)] focus:border-indigo-500 outline-none">
-                <option value="">Select state</option>
-                {["Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Delhi","Goa","Gujarat","Haryana","Himachal Pradesh","Jharkhand","Karnataka","Kerala","Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Odisha","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana","Tripura","Uttar Pradesh","Uttarakhand","West Bengal"].map(s => (
-                  <option key={s}>{s}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">PIN Code</label>
-              <input name="pincode" value={form.pincode} onChange={handleChange}
-                maxLength={6}
-                className="w-full px-4 py-2.5 border border-[var(--border-subtle)] rounded-xl text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
-                placeholder="400001" />
-            </div>
-          </div>
-        </Card>
-
-        {/* ── Save Button ────────────────────────────────────────────── */}
-        <button type="submit" disabled={loading}
-          className="w-full py-4 bg-indigo-600 text-white font-bold rounded-2xl hover:bg-indigo-700 transition-colors disabled:opacity-60 text-sm flex items-center justify-center gap-2">
-          {loading ? <><Spinner size={16} className="border-t-white" /> Saving...</> : <><Save size={16} /> Save Profile</>}
-        </button>
-      </form>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
-
 export default ProfilePage;

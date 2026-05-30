@@ -1,5 +1,6 @@
 // src/pages/HomePage.jsx  — Full updated homepage with all PDF requirements
 import { useState } from "react";
+import { ThemeToggleButton } from "../components/common/ThemeToggle";
 import { useNavigate } from "react-router-dom";
 import {
   ShieldCheck, FileText, BarChart2, Building2, CreditCard,
@@ -79,6 +80,7 @@ const Navbar = ({ navigate }) => {
           {["Services","Pricing","About","Careers"].map(item => <button key={item} className="hover:text-indigo-600 transition-colors">{item}</button>)}
         </div>
         <div className="flex items-center gap-3">
+          <ThemeToggleButton />
           <button onClick={() => navigate("/login")} className="text-sm font-semibold text-[var(--text-secondary)] hover:text-indigo-600 px-4 py-2">Login</button>
           <button onClick={() => navigate("/register")} className="text-sm font-semibold bg-indigo-600 text-white px-5 py-2.5 rounded-xl hover:bg-indigo-700 transition-colors">Get Started</button>
         </div>

@@ -34,6 +34,17 @@ html.dark {
   --brand-glow:     rgba(99,102,241,0.18);
 
   --shadow-card:    0 2px 20px rgba(0,0,0,0.45);
+  /* ── Sidebar tokens ── */
+  --bg-sidebar:             #080b12;
+  --sidebar-border:         rgba(255,255,255,0.07);
+  --sidebar-text:           #64748b;
+  --sidebar-text-primary:   #e2e8f0;
+  --sidebar-icon:           #475569;
+  --sidebar-hover:          rgba(255,255,255,0.055);
+  --sidebar-active-bg:      rgba(99,102,241,0.15);
+  --sidebar-active-text:    #ffffff;
+  --sidebar-active-icon:    #818cf8;
+  --sidebar-active-border:  rgba(99,102,241,0.30);
   --shadow-btn:     0 4px 14px rgba(99,102,241,0.28);
   --divide-color:   rgba(255,255,255,0.06);
 }
@@ -61,6 +72,17 @@ html.light {
   --brand-glow:     rgba(99,102,241,0.10);
 
   --shadow-card:    0 1px 8px rgba(0,0,0,0.07);
+  /* ── Sidebar tokens ── */
+  --bg-sidebar:             #1e293b;
+  --sidebar-border:         rgba(255,255,255,0.08);
+  --sidebar-text:           #94a3b8;
+  --sidebar-text-primary:   #f1f5f9;
+  --sidebar-icon:           #64748b;
+  --sidebar-hover:          rgba(255,255,255,0.07);
+  --sidebar-active-bg:      rgba(99,102,241,0.25);
+  --sidebar-active-text:    #ffffff;
+  --sidebar-active-icon:    #a5b4fc;
+  --sidebar-active-border:  rgba(99,102,241,0.40);
   --shadow-btn:     0 4px 12px rgba(99,102,241,0.22);
   --divide-color:   #e2e8f0;
 }

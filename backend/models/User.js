@@ -17,7 +17,8 @@ const userSchema = new mongoose.Schema({
   assignedAccountant: { type:mongoose.Schema.Types.ObjectId, ref:"User" },
   plan:     { type:String, enum:["Basic","Pro","Enterprise"], default:"Basic" },
   isActive: { type:Boolean, default:true },
-  avatar:   { type:String, default:"" },
+  avatar:          { type:String, default:"" },
+  avatarPublicId:  { type:String, default:"" },
 }, { timestamps:true });
 
 // Hash password before save (Mongoose 7+ — no next parameter)

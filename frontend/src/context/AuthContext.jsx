@@ -1,74 +1,75 @@
 // src/context/AuthContext.jsx
-// Global authentication state using React Context
-// Every component can access `user`, `login`, `logout` from here
-// ─────────────────────────────────────────────────────────────────────────────
-
 import { createContext, useContext, useState, useEffect } from "react";
 import api from "../api/axios";
-import toast from "react-hot-toast";
+import { isTokenExpired } from "../hooks/useSessionManager";
 
-// 1. Create the context object
-const AuthContext = createContext(null);
+const AuthContext = createContext();
 
-// 2. Provider component — wraps the entire app in App.jsx
 export const AuthProvider = ({ children }) => {
-  // Initialize state from localStorage (so user stays logged in on refresh)
-  const [user, setUser] = useState(() => {
-    const saved = localStorage.getItem("taxease_user");
-    return saved ? JSON.parse(saved) : null;
-  });
-  const [loading, setLoading] = useState(false);
+  const [user,    setUser]    = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // ─── Login ───────────────────────────────────────────────────────────────
-  const login = async (email, password) => {
-    setLoading(true);
-    try {
-      const { data } = await api.post("/auth/login", { email, password });
+  // ── Restore session on load — expire stale tokens immediately ────────────
+  useEffect(() => {
+    const token  = localStorage.getItem("taxease_token");
+    const stored = localStorage.getItem("taxease_user");
 
-      // Save the JWT token and user object to localStorage
-      localStorage.setItem("taxease_token", data.token);
-      localStorage.setItem("taxease_user", JSON.stringify(data.user));
-
-      setUser(data.user);
-      toast.success(`Welcome back, ${data.user.name.split(" ")[0]}! 👋`);
-      return { success: true, role: data.user.role };
-    } catch (err) {
-      const msg = err.response?.data?.message || "Login failed";
-      toast.error(msg);
-      return { success: false, message: msg };
-    } finally {
-      setLoading(false);
+    if (token && stored) {
+      // Check if JWT is expired before restoring
+      if (isTokenExpired(token)) {
+        clearSession();           // wipe stale data silently
+        sessionStorage.setItem("logout_reason", "token_expired");
+      } else {
+        try { setUser(JSON.parse(stored)); }
+        catch { clearSession(); }
+      }
     }
-  };
+    setLoading(false);
+  }, []);
 
-  // ─── Register ────────────────────────────────────────────────────────────
-  const register = async (formData) => {
-    setLoading(true);
-    try {
-      await api.post("/auth/register", formData);
-      toast.success("Account created! Please login.");
-      return { success: true };
-    } catch (err) {
-      const msg = err.response?.data?.message || "Registration failed";
-      toast.error(msg);
-      return { success: false, message: msg };
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // ─── Logout ──────────────────────────────────────────────────────────────
-  const logout = () => {
+  const clearSession = () => {
     localStorage.removeItem("taxease_token");
     localStorage.removeItem("taxease_user");
     setUser(null);
-    toast.success("Logged out successfully");
   };
 
-  // ─── Update local user state (after profile edit) ────────────────────────
-  const updateUser = (updatedUser) => {
-    setUser(updatedUser);
-    localStorage.setItem("taxease_user", JSON.stringify(updatedUser));
+  const login = async (email, password) => {
+    try {
+      const { data } = await api.post("/auth/login", { email, password });
+      localStorage.setItem("taxease_token", data.token);
+      localStorage.setItem("taxease_user",  JSON.stringify(data.user));
+      // Store login timestamp
+      localStorage.setItem("taxease_login_at", Date.now().toString());
+      sessionStorage.removeItem("logout_reason");
+      setUser(data.user);
+      return { success: true, role: data.user.role };
+    } catch (err) {
+      return { success: false, message: err.response?.data?.message || "Login failed" };
+    }
+  };
+
+  const register = async (formData) => {
+    try {
+      const { data } = await api.post("/auth/register", formData);
+      localStorage.setItem("taxease_token", data.token);
+      localStorage.setItem("taxease_user",  JSON.stringify(data.user));
+      localStorage.setItem("taxease_login_at", Date.now().toString());
+      sessionStorage.removeItem("logout_reason");
+      setUser(data.user);
+      return { success: true, role: data.user.role };
+    } catch (err) {
+      return { success: false, message: err.response?.data?.message || "Registration failed" };
+    }
+  };
+
+  const logout = () => {
+    clearSession();
+    localStorage.removeItem("taxease_login_at");
+  };
+
+  const updateUser = (updated) => {
+    setUser(updated);
+    localStorage.setItem("taxease_user", JSON.stringify(updated));
   };
 
   return (
@@ -78,11 +79,9 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-// 3. Custom hook — shortcut to use the context
-// Usage: const { user, login, logout } = useAuth();
 export const useAuth = () => {
   const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth must be used inside AuthProvider");
+  if (!ctx) throw new Error("useAuth must be used inside <AuthProvider>");
   return ctx;
 };
 
