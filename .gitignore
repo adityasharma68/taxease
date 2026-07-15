@@ -1,1 +1,2 @@
-nul
+frontend/.env*
+backend/.env*
